@@ -12,7 +12,7 @@ while getopts "t:i:c:o:" opt; do
   case $opt in
     t) DURATION="$OPTARG" ;;         # Total duration in seconds
     i) INTERVAL="$OPTARG" ;;         # Interval in seconds
-    c) 
+    c)
       IFS=',' read -r MIN_CPU MAX_CPU <<< "$OPTARG"
       ;;
     o) OUTPUT="$OPTARG" ;;           # Output CSV file name
@@ -27,7 +27,15 @@ if [ -z "$DURATION" ]; then
   exit 1
 fi
 
-# Run the kube-burner file
-kube-burner init -c kubelet-density.yml --kubeconfig /etc/rancher/k3s/k3s.yaml
-# Run the Python script
+# Ensure required Python packages are installed
+echo "[+] Installing required Python packages..."
+pip install --quiet numpy pandas
+
+echo "[+] Generating CPU usage CSV..."
 python3 generate_cpu_workload.py --duration "$DURATION" --interval "$INTERVAL" --min-cpu "$MIN_CPU" --max-cpu "$MAX_CPU" --output "$OUTPUT"
+
+# Run kube-burner workload
+echo "[+] Running kube-burner..."
+kube-burner init -c kubelet-density.yml --kubeconfig /etc/rancher/k3s/k3s.yaml
+
+echo "[✓] Done. CPU usage data saved to: $OUTPUT"
