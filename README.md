@@ -78,4 +78,6 @@ Save the file and restart kubelet:
 Exit Minikube SSH:
 
     exit
+Verify from host:
 
+    kubectl describe node | grep -i pods
