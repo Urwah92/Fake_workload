@@ -52,3 +52,30 @@ This will simulate CPU usage between 15% and 80% every 1 second for 60 seconds:
 Command for k3s:
 
     k3s kubectl delete pod -n namespace -l name=kubelet-density
+
+
+#More pods on a single node (For Minikube)
+SSH into Minikube:
+
+    minikube ssh
+
+Edit the kubelet config:
+
+    sudo vi /var/lib/kubelet/config.yaml
+
+Add:
+
+    maxPods: 1000
+
+Right under:
+
+    cgroupDriver: systemd
+
+Save the file and restart kubelet:
+
+    sudo systemctl restart kubelet
+
+Exit Minikube SSH:
+
+    exit
+
