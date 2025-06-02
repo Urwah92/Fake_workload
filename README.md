@@ -54,7 +54,7 @@ Command for k3s:
     k3s kubectl delete pod -n namespace -l name=kubelet-density
 
 
-#More pods on a single node (For Minikube)
+# More pods on a single node (For Minikube)
 SSH into Minikube:
 
     minikube ssh
